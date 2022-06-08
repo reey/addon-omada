@@ -13,6 +13,8 @@ ARG OMADA_URL="https://static.tp-link.com/upload/software/2022/202205/20220507/$
 
 COPY rootfs/install.sh rootfs/healthcheck.sh /
 
+RUN ls -la /install.sh
+
 RUN /install.sh && rm /install.sh
 
 # Copy root filesystem
