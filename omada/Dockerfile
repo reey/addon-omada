@@ -3,7 +3,7 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/amd64:7.2.0
 FROM ${BUILD_FROM}
 
 # Set shell
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base system
 ARG BUILD_ARCH=amd64
