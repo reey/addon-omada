@@ -1,6 +1,6 @@
 ---
 name: Omada Controller
-version: 0.1.1
+version: 0.1.2
 slug: omada
 description: Manage your TP-Link Omada hardware
 url: https://github.com/reey/addon-omada
@@ -15,7 +15,8 @@ backup: cold
 map:
   - ssl
 ingress: true
-ingress_port: 8043
+ingress_port: 8088
+ingress_entry: /login
 options:
   certfile: fullchain.pem
   keyfile: privkey.pem
