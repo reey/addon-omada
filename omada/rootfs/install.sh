@@ -7,7 +7,8 @@ ARCH="${ARCH:-}"
 OMADA_VER="${OMADA_VER:-}"
 OMADA_TAR="${OMADA_TAR:-}"
 OMADA_URL="${OMADA_URL:-}"
-OMADA_MAJOR_VER="$(echo "${OMADA_VER}" | awk -F '.' '{print $1}')"
+OMADA_MAJOR_VER="${OMADA_VER%.*.*}"
+OMADA_MAJOR_MINOR_VER="${OMADA_VER%.*}"
 
 die() { echo -e "$@" 2>&1; exit 1; }
 
@@ -15,7 +16,7 @@ die() { echo -e "$@" 2>&1; exit 1; }
 PKGS=(
   gosu
   net-tools
-  openjdk-8-jre-headless
+  openjdk-17-jre-headless
   tzdata
   wget
 )
@@ -71,18 +72,18 @@ mkdir "${OMADA_DIR}" -vp
 # starting with 5.0.x, the installation has no webapps directory; these values are pulled from the install.sh
 case "${OMADA_MAJOR_VER}" in
   5)
-    # check which 5.x we are running
-    case "${OMADA_VER}" in
-      5.3.1)
-        # 5.3.1 move the keystore directory to be a subdir of data
-        NAMES=( bin data properties lib install.sh uninstall.sh )
-        ;;
-      *)
-        NAMES=( bin data properties keystore lib install.sh uninstall.sh )
-        ;;
-    esac
+    # see if we are running 5.3.x or greater by checking the minor version
+    if [ "${OMADA_MAJOR_MINOR_VER#*.}" -ge 3 ]
+    then
+      # 5.3.1 and above moved the keystore directory to be a subdir of data
+      NAMES=( bin data properties lib install.sh uninstall.sh )
+    else
+      # is less than 5.3
+      NAMES=( bin data properties keystore lib install.sh uninstall.sh )
+    fi
     ;;
   *)
+    # isn't v5.x
     NAMES=( bin data properties keystore lib webapps install.sh uninstall.sh )
     ;;
 esac
@@ -94,8 +95,9 @@ do
 done
 
 # symlink for mongod
-ln -sf "$(which mongod)" "${OMADA_DIR}/bin/mongod"
+ln -sf "$(command -v mongod)" "${OMADA_DIR}/bin/mongod"
 chmod 755 "${OMADA_DIR}"/bin/*
+
 
 echo "**** Setup omada User Account ****"
 groupadd -g 508 omada

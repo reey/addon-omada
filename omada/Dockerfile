@@ -7,9 +7,9 @@ FROM ${BUILD_FROM}
 
 # Setup base system
 ARG BUILD_ARCH=amd64
-ARG OMADA_VER=5.3.1
+ARG OMADA_VER=5.5.6
 ARG OMADA_TAR="Omada_SDN_Controller_v${OMADA_VER}_Linux_x64.tar.gz"
-ARG OMADA_URL="https://static.tp-link.com/upload/software/2022/202205/20220507/${OMADA_TAR}"
+ARG OMADA_URL="https://static.tp-link.com/upload/software/2022/202208/20220822/${OMADA_TAR}"
 
 COPY rootfs/install.sh /
 
